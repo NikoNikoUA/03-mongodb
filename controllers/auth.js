@@ -3,6 +3,9 @@ import decorators from "../decorators/index.js";
 import model from "../models/User.js";
 import helpers from "../helpers/index.js";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { User } = model;
 const { SECRET_KEY } = process.env;
