@@ -8,12 +8,13 @@ const { schemas } = model;
 
 const router = express.Router();
 
-router.get("/", controllers.getAll);
+router.get("/", mdw.isAuthorized, controllers.getAll);
 
-router.get("/:contactId", mdw.isValidId, controllers.getById);
+router.get("/:contactId", mdw.isAuthorized, mdw.isValidId, controllers.getById);
 
 router.post(
   "/",
+  mdw.isAuthorized,
   mdw.isEmptyBody,
   decorators.validateBody(schemas.addSchema),
   controllers.addContact
@@ -21,6 +22,7 @@ router.post(
 
 router.put(
   "/:contactId",
+  mdw.isAuthorized,
   mdw.isValidId,
   mdw.isEmptyBody,
   decorators.validateBody(schemas.addSchema),
@@ -29,12 +31,18 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  mdw.isAuthorized,
   mdw.isValidId,
   mdw.isEmptyBody,
   decorators.validateBody(schemas.addFavoriteSchema),
   controllers.updateStatusContact
 );
 
-router.delete("/:contactId", mdw.isValidId, controllers.deleteContact);
+router.delete(
+  "/:contactId",
+  mdw.isAuthorized,
+  mdw.isValidId,
+  controllers.deleteContact
+);
 
 export default router;

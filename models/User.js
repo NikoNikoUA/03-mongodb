@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import helpers from "../helpers/index.js";
 import Joi from "joi";
 
-const subscriptionType = ["starter", "pro", "business"];
+export const subscriptionType = ["starter", "pro", "business"];
 
 const userSchema = new Schema(
   {
@@ -23,7 +23,9 @@ const userSchema = new Schema(
       enum: subscriptionType,
       default: "starter",
     },
-    token: String,
+    token: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -46,8 +48,14 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionType)
+    .required(),
+});
+
 const User = model("user", userSchema);
 
-const schemas = { registerSchema, loginSchema };
+const schemas = { registerSchema, loginSchema, updateSubscriptionSchema };
 
 export default { User, schemas };

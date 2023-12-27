@@ -4,6 +4,7 @@ import model from "../models/User.js";
 import helpers from "../helpers/index.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { subscriptionType } from "../models/User.js";
 
 dotenv.config();
 
@@ -47,15 +48,55 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  console.log(payload);
-
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "10h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({ token });
-  console.log(token);
+};
+
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.json({ message: "No content" });
+};
+
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  try {
+    const { subscription } = req.body;
+    if (!subscriptionType.includes(subscription)) {
+      throw helpers.HttpError(400, "Invalid subscription value");
+    }
+
+    const result = await User.findByIdAndUpdate(
+      _id,
+      { subscription },
+      { new: true }
+    );
+    if (!result) {
+      throw helpers.HttpError(404, "User not found");
+    }
+    res.json(result);
+  } catch (error) {
+    res
+      .status(error.statusCode || 500)
+      .json({ error: error.message || "Internal Server Error" });
+  }
 };
 
 export default {
   register: decorators.ctrlWrapper(register),
   login: decorators.ctrlWrapper(login),
+  getCurrent: decorators.ctrlWrapper(getCurrent),
+  logout: decorators.ctrlWrapper(logout),
+  updateSubscription: decorators.ctrlWrapper(updateSubscription),
 };
