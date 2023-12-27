@@ -7,7 +7,7 @@ const { User } = model;
 
 dotenv.config();
 
-const { SECRET_KEY } = process.env;
+const { SECRET_JWT } = process.env;
 
 const isAuthorized = async (req, res, next) => {
   const { authorization = "" } = req.headers;
@@ -16,7 +16,7 @@ const isAuthorized = async (req, res, next) => {
     next(helpers.HttpError(401, "Not authorized"));
   }
   try {
-    const { id } = jwt.verify(token, SECRET_KEY);
+    const { id } = jwt.verify(token, SECRET_JWT);
     const user = await User.findById(id);
     if (!user || !user.token || user.token !== token) {
       next(helpers.HttpError(401, "Not authorized"));

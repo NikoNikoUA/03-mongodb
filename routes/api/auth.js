@@ -5,29 +5,29 @@ import controllers from "../../controllers/auth.js";
 import mdw from "../../middlewares/index.js";
 
 const { schemas } = model;
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post(
+authRouter.post(
   "/register",
   decorators.validateBody(schemas.registerSchema),
   controllers.register
 );
 
-router.post(
+authRouter.post(
   "/login",
   decorators.validateBody(schemas.loginSchema),
   controllers.login
 );
 
-router.get("/current", mdw.isAuthorized, controllers.getCurrent);
+authRouter.get("/current", mdw.isAuthorized, controllers.getCurrent);
 
-router.post("/logout", mdw.isAuthorized, controllers.logout);
+authRouter.post("/logout", mdw.isAuthorized, controllers.logout);
 
-router.patch(
+authRouter.patch(
   "/users",
   mdw.isAuthorized,
   decorators.validateBody(schemas.updateSubscriptionSchema),
   controllers.updateSubscription
 );
 
-export default router;
+export default authRouter;
