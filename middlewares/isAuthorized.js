@@ -11,6 +11,9 @@ const { SECRET_JWT } = process.env;
 
 const isAuthorized = async (req, res, next) => {
   const { authorization = "" } = req.headers;
+  if (!authorization) {
+    return next(helpers.HttpError(401, "Not authorized"));
+  }
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
     next(helpers.HttpError(401, "Not authorized"));

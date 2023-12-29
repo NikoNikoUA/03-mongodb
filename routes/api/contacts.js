@@ -8,6 +8,8 @@ const { schemas } = model;
 
 const router = express.Router();
 
+// router.use(mdw.isAuthorized);
+
 router.get("/", mdw.isAuthorized, controllers.getAll);
 
 router.get("/:contactId", mdw.isAuthorized, mdw.isValidId, controllers.getById);

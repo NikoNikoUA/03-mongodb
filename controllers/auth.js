@@ -51,7 +51,13 @@ const login = async (req, res) => {
   const token = jwt.sign(payload, SECRET_JWT, { expiresIn: "10h" });
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
 };
 
 const getCurrent = async (req, res) => {
@@ -66,7 +72,7 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({ message: "No content" });
+  res.status(204);
 };
 
 const updateSubscription = async (req, res) => {
@@ -87,9 +93,7 @@ const updateSubscription = async (req, res) => {
     }
     res.json(result);
   } catch (error) {
-    res
-      .status(error.statusCode || 500)
-      .json({ error: error.message || "Internal Server Error" });
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
