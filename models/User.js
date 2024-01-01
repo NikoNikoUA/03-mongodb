@@ -35,10 +35,10 @@ userSchema.pre("findOneAndUpdate", helpers.handleUpdateSchema);
 userSchema.post("findOneAndUpdate", helpers.handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string(),
-  subscription: Joi.string()
-    .valid(...subscriptionType)
-    .required(),
+  // name: Joi.string(),
+  // subscription: Joi.string()
+  //   .valid(...subscriptionType)
+  //   .required(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
