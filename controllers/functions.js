@@ -1,6 +1,8 @@
 import decorators from "../decorators/index.js";
 import model from "../models/Contact.js";
 import helpers from "../helpers/index.js";
+import { rename } from "fs/promises";
+import path from "path";
 
 const { Contact } = model;
 
@@ -27,8 +29,18 @@ const getById = async (req, res) => {
 
 const addContact = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.create({ ...req.body, owner });
+  const avatarDir = path.resolve("public", "avatars");
+  const { path: tempDir, originalname } = req.file;
+  const resultUpload = path.join(avatarDir, originalname);
+  await rename(tempDir, resultUpload);
+  const avatar = path.join("avatars", originalname);
+  const result = await Contact.create({ ...req.body, owner, avatar });
   res.status(201).json(result);
+
+  console.log(avatar);
+
+  console.log(req.body);
+  console.log(req.file);
 };
 
 const updateContact = async (req, res) => {

@@ -30,4 +30,11 @@ authRouter.patch(
   controllers.updateSubscription
 );
 
+authRouter.patch(
+  "/avatars",
+  mdw.isAuthorized,
+  mdw.upload.single("avatar"),
+  controllers.updateAvatar
+);
+
 export default authRouter;
