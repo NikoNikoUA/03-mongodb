@@ -106,6 +106,9 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  if (!req.file) {
+    res.status(400).json({ message: "No file uploaded" });
+  }
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
@@ -114,8 +117,16 @@ const updateAvatar = async (req, res) => {
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
+  // Jimp.read(resultUpload)
+  //   .then((avatar) => {
+  //     return avatar.resize(250, 250).writeAsync(resultUpload);
+  //   })
+  //   .then(() => {
+  //     res.json({ avatarURL });
+  //   });
+
   const avatar = await Jimp.read(resultUpload);
-  avatar.resize(250, 250).write(resultUpload);
+  avatar.resize(250, 250).writeAsync(resultUpload);
 
   res.json({
     avatarURL,
