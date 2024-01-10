@@ -13,6 +13,14 @@ authRouter.post(
   controllers.register
 );
 
+authRouter.get("/verify/:verificationToken", controllers.verifyEmail);
+
+authRouter.post(
+  "/verify",
+  decorators.validateBody(schemas.emailVerificationSchema),
+  controllers.resendVerification
+);
+
 authRouter.post(
   "/login",
   decorators.validateBody(schemas.loginSchema),
