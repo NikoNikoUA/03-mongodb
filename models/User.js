@@ -8,7 +8,7 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Enter name"],
+      // required: [true, "Enter name"],
     },
     password: {
       type: String,
@@ -36,7 +36,7 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, "Verify token is required"],
+      // required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
@@ -47,7 +47,7 @@ userSchema.pre("findOneAndUpdate", helpers.handleUpdateSchema);
 userSchema.post("findOneAndUpdate", helpers.handleMongooseError);
 
 const registerSchema = Joi.object({
-  // name: Joi.string(),
+  // name: Joi.string().required(),
   // subscription: Joi.string()
   //   .valid(...subscriptionType)
   //   .required(),

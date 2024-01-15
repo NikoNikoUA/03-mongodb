@@ -182,11 +182,6 @@ const updateAvatar = async (req, res) => {
   res.json({
     avatarURL,
   });
-  // console.log(avatarURL);
-
-  // console.log(req.body);
-  // console.log(req.file);
-  // console.log(req.user);
 };
 
 export default {

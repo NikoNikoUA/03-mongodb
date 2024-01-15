@@ -3,34 +3,39 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { META_PASSWORD } = process.env;
+const { UKR_NET_PASSWORD, UKR_NET_EMAIL } = process.env;
 
 const nodemailerConfig = {
-  host: "smtp.meta.ua",
+  host: "smtp.ukr.net",
   port: 465,
   secure: true,
   auth: {
-    user: "nikonikoua-23@meta.ua",
-    pass: META_PASSWORD,
+    user: UKR_NET_EMAIL,
+    pass: UKR_NET_PASSWORD,
   },
 };
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const email = {
-  to: "nibogid938@regapts.com",
-  from: "nikonikoua-23@meta.ua",
-  subject: "Hello Test",
-  html: "<p>Nice to meet you! It is working</p>",
-};
+// const email = {
+//   to: "gabel45506@rentaen.com",
+//   from: UKR_NET_EMAIL,
+//   subject: "Hello Test",
+//   html: "<p>Nice to meet you! It is working</p>",
+// };
 
-const sendEmail = async () => {
-  try {
-    await transport.sendMail(email);
-    console.log("Email sent successfully");
-  } catch (error) {
-    console.log(error.message);
-  }
+// const sendEmail = async () => {
+//   try {
+//     await transport.sendMail(email);
+//     console.log("Email sent successfully");
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+
+const sendEmail = (data) => {
+  const email = { ...data, from: UKR_NET_EMAIL };
+  return transport.sendMail(email);
 };
 
 export default sendEmail;
